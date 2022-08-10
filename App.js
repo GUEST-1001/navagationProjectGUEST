@@ -47,6 +47,7 @@ function CreatePostScreen({ navigation, route }) {
           navigation.navigate('Home', { post: postText })
         }}
       />
+      
     </>
 
   );
