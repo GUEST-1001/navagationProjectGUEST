@@ -3,8 +3,11 @@ import React, { useState } from "react";
 
 export default function FirstPage() {
   return (
-    <View>
-      <Text>FirstPage</Text>
+    <View style={styles.container}>
+      <Text style={styles.heading}>ThaiNichi Institute of Techonolohgy</Text>
+      <Text style={styles.textStyle}>Plese insert your name to pass it to second screen</Text>
+      <TextInput style={{justifyContent:'center', backgroundColor:'gray'}} placeholder="Insert Your Name"/>
+      <Button title="go next"/>
     </View>
   );
 }
