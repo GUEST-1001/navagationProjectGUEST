@@ -3,7 +3,7 @@ import React from "react";
 
 import { Ionicons } from "@expo/vector-icons";
 
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
@@ -29,6 +29,14 @@ function SettingScreen({ navigation }) {
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
+
+const myTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "rgb(255,45,85)",
+  },
+};
 
 function MyTab() {
   return (
@@ -58,7 +66,7 @@ function MyTab() {
 
 function MyDrawer() {
   return (
-    <Drawer.Navigator useLegacyImplementation>
+    <Drawer.Navigator useLegacyImplementation >
       <Drawer.Screen name="Home" component={MyTab} />
       <Drawer.Screen name="Setting" component={SettingScreen} />
     </Drawer.Navigator>
@@ -67,7 +75,7 @@ function MyDrawer() {
 
 const App = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={myTheme}>
       <MyDrawer />
     </NavigationContainer>
   );
