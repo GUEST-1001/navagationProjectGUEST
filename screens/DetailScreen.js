@@ -76,7 +76,7 @@ const DetailScreen = ({ navigation, route }) => {
           <Text style={styles.thumbnail}>{index+1}</Text>
           <View style={styles.dataContent}>
             <Text style={styles.title}>{item.ch_title}</Text>
-            <Text note numberOfLines={1}>{item.ch_dateadd}</Text>
+            <Text note numberOfLines={1}>{item.detail}</Text>
           </View>
         </View>
       </View>
