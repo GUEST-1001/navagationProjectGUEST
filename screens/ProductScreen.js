@@ -5,40 +5,91 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 import axios from "axios";
 
-const ProductScreen = () => {
+const ProductScreen = ({ navigation }) => {
   const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const getData = async () => {
-    const res = await axios.get("https://api.codingthailand.com/api/course");
-    console.log(res.data.data);
-    setProduct(res.data.data);
+    try {
+      setLoading(true);
+      const res = await axios.get("https://api.codingthailand.com/api/course");
+      console.log(res.data.data);
+      setProduct(res.data.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(error); //set error to state error
+    }
   };
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+    }, [])
+  );
+
+  if (error) {
+    //if error is exist return UI
+    return (
+      <View style={styles.container}>
+        <Text>{error.message}</Text>
+        <Text>Unable to connect the server</Text>
+      </View>
+    );
+  }
+
+  if (loading === true) {
+    return (
+      <View>
+        <ActivityIndicator color="#f4511e" />
+      </View>
+    );
+  }
+
+  const _onRefesh = () => {
     getData();
-  }, []);
+  };
 
   const _renderItem = ({ item }) => {
     return (
-      <View style={styles.dataContainer}>
-        <View style={styles.container}>
-          <Image
-            style={styles.thumbnail}
-            source={{ uri: item.picture }}
-            resizeMode="cover"
-          />
+      <SafeAreaView style={{ flex: 1 }}>
+        <TouchableOpacity
+          style={styles.addButtonStyle}
+          onPress = {() => {
+            navigation.navigate('Detail',{
+              id:item.id,
+              title:item.title
+            })
+          }}
+        >
+          <View style={styles.dataContainer}>
+            <View style={styles.container}>
+              <Image
+                style={styles.thumbnail}
+                source={{ uri: item.picture }}
+                resizeMode="cover"
+              />
 
-          <View style={styles.dataContent}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.detail}>{item.detail}</Text>
+              <View style={styles.dataContent}>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.detail}>{item.detail}</Text>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
+        </TouchableOpacity>
+      </SafeAreaView>
     );
   };
 
@@ -48,6 +99,8 @@ const ProductScreen = () => {
         data={product}
         keyExtractor={(item) => item.id.toString()}
         renderItem={_renderItem}
+        refreshing={loading}
+        onRefresh={_onRefesh}
       />
     </View>
   );
@@ -84,5 +137,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#888",
     fontWeight: "700",
+  },
+  addButtonStyle: {
+    width: "100%",
+    marginBottom: 15,
   },
 });

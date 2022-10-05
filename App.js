@@ -3,6 +3,7 @@ import { Text, View, Button, TextInput, StyleSheet, Image } from "react-native";
 
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -19,6 +20,7 @@ import {
 
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
+import DetailScreen from "./screens/DetailScreen";
 
 import React from "react";
 import { SafeAreaView } from "react-native-web";
@@ -49,6 +51,26 @@ function CustomDrawerContent(props) {
   );
 }
 
+const Stack = createNativeStackNavigator();
+function ProductStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#0096da",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
+      <Stack.Screen name="Product" component={ProductScreen} />
+      <Stack.Screen name="Detail" component={DetailScreen} />
+    </Stack.Navigator>
+  );
+}
+
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -63,7 +85,7 @@ function MyDrawer() {
       }}
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Product" component={ProductScreen} />
+      <Drawer.Screen name="Product" component={ProductStack} />
     </Drawer.Navigator>
   );
 }
@@ -83,7 +105,7 @@ const styles = StyleSheet.create({
     resizeMode: "center",
     width: 100,
     height: 100,
-    borderRadius: 100/2,
+    borderRadius: 100 / 2,
     alignSelf: "center",
   },
 });
